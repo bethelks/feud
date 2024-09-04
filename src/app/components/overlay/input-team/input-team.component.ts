@@ -9,7 +9,7 @@ import { Team } from 'src/app/model/model';
 export class InputTeamComponent implements OnInit {
 
   @Input() team = new Team("","")
-  @Input() title: string = "Team 1"
+  @Input() title: string = "Masterminds"
 
   constructor() { }
 

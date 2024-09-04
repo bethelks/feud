@@ -7,8 +7,8 @@ export class State {
     public tempScore = 0
     public instructionStep = 0
 
-    public team1 = new Team("Team 1", "#FF454E")
-    public team2 = new Team("Team 2", "#71d2ff")
+    public team1 = new Team("Masterminds", "#FF454E")
+    public team2 = new Team("Head Hunters", "#71d2ff")
 
     public secondWindow: Window | null
 

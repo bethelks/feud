@@ -1,9 +1,9 @@
 <ng-container *ngIf="winningTeam != null; else draw">
     <h1 class="bold">Winner</h1>
     <h1 class="team" [style.background]="winningTeam.color">{{winningTeam.name}}</h1>
-    <p>with a score of</p>
+    <p>Micah this needs to have some wording for the winner here.</p>
     <h1 class="score">{{winningTeam.score}}</h1>
-    <p>your winning price will be handed over shortly.</p>
+    <p>.</p>
 </ng-container>
 
 <ng-template #draw>

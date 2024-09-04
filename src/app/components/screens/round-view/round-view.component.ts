@@ -14,11 +14,13 @@ export class RoundViewComponent implements OnInit {
   @Input() isSecondScreen = false
   @Input() numAnswers = 0
   numbers = new Array(8)
-
+  selectedAnswerIndex: number | null = null;
   constructor() { }
 
   ngOnInit(): void {
   }
-
+  selectAnswer(index: number): void {
+    this.selectedAnswerIndex = index;
+}
 
 }

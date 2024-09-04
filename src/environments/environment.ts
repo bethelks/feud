@@ -6,9 +6,9 @@ import { Shorcut } from "src/app/components/view/shorcut/shorcut.component";
 
 export const environment = {
   production: true,
-  title: "Family Feud",
-  subtitle: "Your Edition",
-  host: "Steve Harvey",
+  title: "Developer Feud",
+  subtitle: "Bethel College - Software Development Program",
+  host: "Professor Hines",
 
   // Keys for the buzzers
   buzzer1: {
