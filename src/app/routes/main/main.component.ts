@@ -10,13 +10,16 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./main.component.css']
 })
 export class MainComponent {
-
+  //handle x in here possibly
   state = new State()
   mediaState = new MediaState()
 
   selectedTeam: Team | null = null
   teamBuzzed = false
 
+  l_team = 0
+  r_team = 0 //to hold strikes, reset upon new round
+  check = false;
   xVisible = false
   isMenuVisible = false
 
@@ -134,7 +137,7 @@ export class MainComponent {
       if(event.shiftKey) {
         this.unstrike()
       } else {
-        this.strike()
+        this.strike(this.selectedTeam)
       }
     }
 
@@ -144,7 +147,8 @@ export class MainComponent {
     }
 
     // ======= Score
-    if(event.code == "KeyS") {
+    if(event.code == "KeyS" && this.check == false) {
+      this.check = true
       if(event.shiftKey) {
         this.addScoreToTeam(-this.state.tempScore)
       } else {
@@ -177,7 +181,7 @@ export class MainComponent {
         break
       }
       case Screen.instructions: {         
-        if(this.state.instructionStep >= 12) {
+        if(this.state.instructionStep >= 3) {
           console.log("ADVANCE -> Rounds")
           this.startRound(0)
         } else {
@@ -245,6 +249,7 @@ export class MainComponent {
   }
 
   showNextOrAdvanceInRound() {
+    this.check = false
     if(this.state.currentRound.isHidden) {
 
       // SHOW ANSWER OPTIONS
@@ -327,16 +332,21 @@ export class MainComponent {
     this.mediaState.playSound(Sound.buzzer)
   }
 
-  strike() {
+  strike(team: Team | null = null) {
     if(this.selectedTeam != null) {
+      console.log('selected team' + this.selectedTeam)
+      if(this.selectedTeam.strikes >= 3) {
+        return
+      }else{
       this.selectedTeam.strikes++
 
       this.mediaState.playSound(Sound.wrong)
   
       this.xVisible = true
+      }
       setTimeout(() => {
         this.xVisible = false
-      }, 4000);
+      }, 2000);
     }
   }
 
