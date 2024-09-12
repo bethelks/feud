@@ -1,4 +1,5 @@
 <div *ngIf="file != null; else selectFile" class="instructions">Press Space to Start</div>
+<!-- catch statement --> 
 <ng-template #selectFile>
     <p>Select a valid Developer Feud file.</p>
     <app-input-file [file]="file" (fileChange)="fileChanged($event)" class="translucent"></app-input-file>
