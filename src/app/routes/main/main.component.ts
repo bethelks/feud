@@ -10,15 +10,14 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./main.component.css']
 })
 export class MainComponent {
-  //handle x in here possibly
   state = new State()
   mediaState = new MediaState()
-
+  team1 = this.state.team1 //mm
+  team2 = this.state.team2 //hh
   selectedTeam: Team | null = null
   teamBuzzed = false
+  teamhas3strikes = false
 
-  l_team = 0
-  r_team = 0 //to hold strikes, reset upon new round
   check = false;
   xVisible = false
   isMenuVisible = false
@@ -28,7 +27,6 @@ export class MainComponent {
   }
 
   ngOnInit() {
-    
   }
 
   ngDoCheck(): void { 
@@ -138,6 +136,9 @@ export class MainComponent {
         this.unstrike()
       } else {
         this.strike(this.selectedTeam)
+        if(this.selectedTeam != null && this.selectedTeam.strikes >= 3) {
+          
+        }
       }
     }
 
@@ -250,6 +251,11 @@ export class MainComponent {
 
   showNextOrAdvanceInRound() {
     this.check = false
+    this.teamBuzzed = false
+    this.teamhas3strikes = false
+    this.team1.strikes = 0
+    this.team2.strikes = 0
+    this.unstrike();
     if(this.state.currentRound.isHidden) {
 
       // SHOW ANSWER OPTIONS
@@ -286,6 +292,8 @@ export class MainComponent {
   // ========= Answer ============
   toggleRevealAllAnswers() {
     const unRevealedAnswers = this.state.currentRound.answers.filter( a => !a.isRevealed )
+    this.team1.strikes = 0
+    this.team2.strikes = 0
     if(unRevealedAnswers.length == 0) {
       this.state.currentRound.isFullyRevealed = false
       this.state.currentRound.answers.forEach( a => a.isRevealed = false )
@@ -335,7 +343,8 @@ export class MainComponent {
   strike(team: Team | null = null) {
     if(this.selectedTeam != null) {
       console.log('selected team' + this.selectedTeam)
-      if(this.selectedTeam.strikes >= 3) {
+      
+      if(this.selectedTeam.strikes == 3) {
         return
       }else{
       this.selectedTeam.strikes++
@@ -343,17 +352,44 @@ export class MainComponent {
       this.mediaState.playSound(Sound.wrong)
   
       this.xVisible = true
+      if(this.selectedTeam.strikes == 3){
+        console.log(this.selectedTeam.name + ' has 3 strikes')
+        this.teamhas3strikes = true
+        this.switchTeam(this.selectedTeam, this.selectedTeam == this.team1 ? this.team2 : this.team1)
+        this.lastQuestion(this.selectedTeam)
       }
+      //if one team has 3 strikes, the other team must answer correctly to get all points
+    }
       setTimeout(() => {
         this.xVisible = false
       }, 2000);
     }
   }
+  
+  lastQuestion(team: Team){
+    //if the next question is answered, then the team answering gets the points
 
-  unstrike() {
+  }
+  switchTeam(team1: Team, team2: Team) {
+    if(this.selectedTeam == team1) {
+      this.selectedTeam = team2
+    } else {
+      this.selectedTeam = team1
+    }
+  }
+
+  unstrike(team: Team | null = null) {
     if(this.selectedTeam != null) {
       this.selectedTeam.strikes = 0
     }
+    /*
+    if(this.team1.strikes == 3) {
+      this.threeStrikeEnd(this.state.tempScore, true, this.team1, this.team2)
+    }
+    if(this.team2.strikes == 3) {
+      this.threeStrikeEnd(this.state.tempScore, true, this.team2, this.team1)
+    }
+      */
   }
 
   revealAnswer(index: number) {
@@ -366,6 +402,11 @@ export class MainComponent {
 
     this.state.tempScore += answer.amount
     this.reevaluateIsFullyRevealed()
+
+    if(this.teamhas3strikes){
+      this.addScoreToTeam(this.state.tempScore)
+  }
+      
   }
 
   unrevealAnswer(index: number) {
@@ -383,8 +424,14 @@ export class MainComponent {
   reevaluateIsFullyRevealed() {
     const unRevealedAnswers = this.state.currentRound.answers.filter( a => !a.isRevealed )
     this.state.currentRound.isFullyRevealed = unRevealedAnswers.length == 0
+    if(this.state.currentRound.isFullyRevealed) {
+      this.addScoreToTeam(this.state.tempScore)
   }
+}
+  
+     
 
+  
   addScoreToTeam(amount: number, playSound = true) {
     if(this.selectedTeam != null) {
       this.selectedTeam.score += amount
