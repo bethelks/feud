@@ -1,445 +1,425 @@
-import { Component, HostListener } from '@angular/core';
-import { MediaState, Music, Sound } from '../../model/media';
+import { Component, HostListener } from "@angular/core";
+import { MediaState, Music, Sound } from "../../model/media";
 import { State, Screen, Round, Team, RoundsFile } from "../../model/model";
-import { Title } from '@angular/platform-browser';
-import { environment } from 'src/environments/environment';
+import { Title } from "@angular/platform-browser";
+import { environment } from "src/environments/environment";
 
 @Component({
-  selector: 'app-main',
-  templateUrl: './main.component.html',
-  styleUrls: ['./main.component.css']
+  selector: "app-main",
+  templateUrl: "./main.component.html",
+  styleUrls: ["./main.component.css"],
 })
 export class MainComponent {
-  state = new State()
-  mediaState = new MediaState()
-  team1 = this.state.team1 //mm
-  team2 = this.state.team2 //hh
-  selectedTeam: Team | null = null
-  teamBuzzed = false
-  teamhas3strikes = false
+  state = new State();
+  mediaState = new MediaState();
+  team1 = this.state.team1; //mm
+  team2 = this.state.team2; //hh
+  selectedTeam: Team | null = null;
+  teamBuzzed = false;
+  teamhas3strikes = false;
 
   check = false;
-  xVisible = false
-  isMenuVisible = false
+  xVisible = false;
+  isMenuVisible = false;
 
-  constructor(private title:Title) {
-    title.setTitle(environment.title)
+  constructor(private title: Title) {
+    title.setTitle(environment.title);
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
-  ngDoCheck(): void { 
-    console.log('check');
+  ngDoCheck(): void {
+    console.log("check");
     if (this.state.secondWindow != null) {
       let state = {
         roundIndex: this.state.roundIndex,
-        currentRound: this.state.currentRound
-      }
-      this.state.secondWindow.postMessage(state, '*')
+        currentRound: this.state.currentRound,
+      };
+      this.state.secondWindow.postMessage(state, "*");
     }
   }
 
   roundsFileLoaded(roundsFile: RoundsFile) {
-    this.state.file = roundsFile
-    this.state.rounds = Round.parse(roundsFile.json)
-    this.state.reset()
+    this.state.file = roundsFile;
+    this.state.rounds = Round.parse(roundsFile.json);
+    this.state.reset();
   }
 
-  @HostListener('window:keyup', ['$event'])
+  @HostListener("window:keyup", ["$event"])
   keyUp(event: KeyboardEvent) {
-    console.log(event.code)
+    console.log(event.code);
 
     // ======= Menu
-    if(event.code == "Escape") {
-      this.isMenuVisible = !this.isMenuVisible
-      return
+    if (event.code == "Escape") {
+      this.isMenuVisible = !this.isMenuVisible;
+      return;
     }
 
     // ======= Team selection
-    if(!event.altKey) {
-      if(event.code == "ArrowLeft") {
-        this.toggleTeam(this.state.team1)
+    if (!event.altKey) {
+      if (event.code == "ArrowLeft") {
+        this.toggleTeam(this.state.team1);
       }
-      if(event.code == "ArrowRight") {
-        this.toggleTeam(this.state.team2)
+      if (event.code == "ArrowRight") {
+        this.toggleTeam(this.state.team2);
       }
-      if(event.code == "ArrowUp") {
-        this.addScoreToTeam(+1, false)
+      if (event.code == "ArrowUp") {
+        this.addScoreToTeam(+1, false);
       }
-      if(event.code == "ArrowDown") {
-        this.addScoreToTeam(-1, false)
+      if (event.code == "ArrowDown") {
+        this.addScoreToTeam(-1, false);
       }
     }
 
     // ======= Music
-    if(event.altKey) {
-      if(event.code == "Digit1") {
-        this.mediaState.playMusic(Music.game)
+    if (event.altKey) {
+      if (event.code == "Digit1") {
+        this.mediaState.playMusic(Music.game);
       }
-      if(event.code == "Digit2") {
-        this.mediaState.playMusic(Music.millionaire)
+      if (event.code == "Digit2") {
+        this.mediaState.playMusic(Music.millionaire);
       }
-      if(event.code == "Digit3") {
-        this.mediaState.playMusic(Music.jazz)
+      if (event.code == "Digit3") {
+        this.mediaState.playMusic(Music.jazz);
       }
-      if(event.code == "KeyP") {
-        this.mediaState.playPauseMusic()
+      if (event.code == "KeyP") {
+        this.mediaState.playPauseMusic();
       }
-      if(event.code == "KeyO") {
-        this.mediaState.toggleDuckMusic()
+      if (event.code == "KeyO") {
+        this.mediaState.toggleDuckMusic();
       }
 
-      if(event.code == "ArrowUp") {
-        this.mediaState.volumeUp()
+      if (event.code == "ArrowUp") {
+        this.mediaState.volumeUp();
       }
-      if(event.code == "ArrowDown") {
-        this.mediaState.volumeDown()
+      if (event.code == "ArrowDown") {
+        this.mediaState.volumeDown();
       }
     }
 
-    if(this.isMenuVisible) return
+    if (this.isMenuVisible) return;
 
     // ======= Advance
-    if(event.code == "Space") {
-      this.advance()
+    if (event.code == "Space") {
+      this.advance();
     }
 
     // ======= Reset
-    if(event.code == "KeyR") {
-      if(event.shiftKey) {
-        this.resetHard()
+    if (event.code == "KeyR") {
+      if (event.shiftKey) {
+        this.resetHard();
       } else {
-        this.reset()
+        this.reset();
       }
     }
 
     // =============== Only After Start ===============
-    if(this.state.screen == Screen.start) {
-      return
+    if (this.state.screen == Screen.start) {
+      return;
     }
 
     // ======= Answers (Numbers)
-    if(event.code == "KeyA" && event.shiftKey) {
-      this.toggleRevealAllAnswers()
+    if (event.code == "KeyA" && event.shiftKey) {
+      this.toggleRevealAllAnswers();
     }
 
-    if(!event.altKey && event.code.includes("Digit")) {
-      let number = parseInt(event.code.replace ( /[^\d.]/g, '' ))
-      const shouldReveal = !event.shiftKey
-      this.controlAnswer(number, shouldReveal)
+    if (!event.altKey && event.code.includes("Digit")) {
+      let number = parseInt(event.code.replace(/[^\d.]/g, ""));
+      const shouldReveal = !event.shiftKey;
+      this.controlAnswer(number, shouldReveal);
     }
 
     // ======= Strike
-    if(event.code == "KeyX") {
-      if(event.shiftKey) {
-        this.unstrike()
+    if (event.code == "KeyX") {
+      if (event.shiftKey) {
+        this.unstrike();
       } else {
-        this.strike(this.selectedTeam)
-        if(this.selectedTeam != null && this.selectedTeam.strikes >= 3) {
-          
+        this.strike(this.selectedTeam);
+        if (this.selectedTeam != null && this.selectedTeam.strikes >= 3) {
         }
       }
     }
 
     // ======= Buzzer
-    if(event.code == "KeyB") {
-      this.hitBuzzer()
+    if (event.code == "KeyB") {
+      this.hitBuzzer();
     }
 
     // ======= Score
-    if(event.code == "KeyS" && this.check == false) {
-      this.check = true
-      if(event.shiftKey) {
-        this.addScoreToTeam(-this.state.tempScore)
+    if (event.code == "KeyS" && this.check == false) {
+      this.check = true;
+      if (event.shiftKey) {
+        this.addScoreToTeam(-this.state.tempScore);
       } else {
-        this.addScoreToTeam(this.state.tempScore)
+        this.addScoreToTeam(this.state.tempScore);
       }
     }
   }
 
-  @HostListener('window:keydown', ['$event'])
+  @HostListener("window:keydown", ["$event"])
   keyDown(event: KeyboardEvent) {
-    if(event.code == environment.buzzer1.keyCode) {
-      this.hitBuzzer(this.state.team1)
+    if (event.code == environment.buzzer1.keyCode) {
+      this.hitBuzzer(this.state.team1);
     }
 
-    if(event.code == environment.buzzer2.keyCode) {
-      this.hitBuzzer(this.state.team2)
+    if (event.code == environment.buzzer2.keyCode) {
+      this.hitBuzzer(this.state.team2);
     }
   }
 
   advance() {
-    switch(this.state.screen) {
-      case Screen.start: { 
-        console.log("ADVANCE -> Intro")
-        this.state.screen = Screen.intro
-        break
+    switch (this.state.screen) {
+      case Screen.start: {
+        console.log("ADVANCE -> Intro");
+        this.state.screen = Screen.intro;
+        break;
       }
-      case Screen.intro: { 
-        console.log("ADVANCE -> Instructions")
-        this.state.screen = Screen.instructions
-        break
+      case Screen.intro: {
+        console.log("ADVANCE -> Instructions");
+        this.state.screen = Screen.instructions;
+        break;
       }
-      case Screen.instructions: {         
-        if(this.state.instructionStep >= 3) {
-          console.log("ADVANCE -> Rounds")
-          this.startRound(0)
+      case Screen.instructions: {
+        if (this.state.instructionStep >= 3) {
+          console.log("ADVANCE -> Rounds");
+          this.startRound(0);
         } else {
-          this.state.instructionStep++
-          console.log("ADVANCE -> Instructions " + this.state.instructionStep)
+          this.state.instructionStep++;
+          console.log("ADVANCE -> Instructions " + this.state.instructionStep);
         }
-        break
+        break;
       }
       default: {
-        console.log("ADVANCE -> Next Round or Advance in Round")
-        this.showNextOrAdvanceInRound()
-        break
+        console.log("ADVANCE -> Next Round or Advance in Round");
+        this.showNextOrAdvanceInRound();
+        break;
       }
     }
   }
 
   // Helpers
   overlayWants(key: string) {
-    if(key == "reset") {
-      this.reset()
+    if (key == "reset") {
+      this.reset();
     }
-    if(key == "resetAll") {
-      this.resetHard()
+    if (key == "resetAll") {
+      this.resetHard();
     }
   }
 
   reset() {
-    this.teamBuzzed = false
-    this.selectedTeam = null
+    this.teamBuzzed = false;
+    this.selectedTeam = null;
   }
 
   resetHard() {
-    this.isMenuVisible = false
-    this.state.reset()
-    this.state.resetTeams()
+    this.isMenuVisible = false;
+    this.state.reset();
+    this.state.resetTeams();
 
-    this.teamBuzzed = false
-    this.selectedTeam = null
+    this.teamBuzzed = false;
+    this.selectedTeam = null;
   }
 
   // ========= Round ============
   startRound(index: number) {
-    this.state.currentRound = this.state.rounds[index]
-    this.state.tempScore = 0
+    this.state.currentRound = this.state.rounds[index];
+    this.state.tempScore = 0;
 
-    this.selectedTeam = null
-    this.teamBuzzed = false
-    this.state.roundIndex = index
-    this.state.screen = Screen.round
+    this.selectedTeam = null;
+    this.teamBuzzed = false;
+    this.state.roundIndex = index;
+    this.state.screen = Screen.round;
   }
 
   showAnswerOptions() {
-    if(!this.state.currentRound.isHidden) {
-      return
+    if (!this.state.currentRound.isHidden) {
+      return;
     }
 
-    this.state.currentRound.isHidden = false
+    this.state.currentRound.isHidden = false;
     this.state.currentRound.answers.forEach((answer, index) => {
-      answer.isHidden = true
+      answer.isHidden = true;
       setTimeout(() => {
-        answer.isHidden = false
-        this.mediaState.playSound(Sound.click)
+        answer.isHidden = false;
+        this.mediaState.playSound(Sound.click);
       }, index * 200);
     });
   }
 
   showNextOrAdvanceInRound() {
-    this.check = false
-    this.teamBuzzed = false
-    this.teamhas3strikes = false
-    this.team1.strikes = 0
-    this.team2.strikes = 0
+    this.check = false;
+    this.teamBuzzed = false;
+    this.teamhas3strikes = false;
+    this.team1.strikes = 0;
+    this.team2.strikes = 0;
     this.unstrike();
-    if(this.state.currentRound.isHidden) {
-
+    if (this.state.currentRound.isHidden) {
       // SHOW ANSWER OPTIONS
-      this.showAnswerOptions()
+      this.showAnswerOptions();
       // this.mediaState.duckMusic(true)
       // setTimeout(() => {
       //   this.mediaState.duckMusic(false)
       // }, 4500.0);
-
-    } else if(!this.state.currentRound.isQuestionRevealed) {
-
+    } else if (!this.state.currentRound.isQuestionRevealed) {
       // SHOW QUESTION
-      this.state.currentRound.isQuestionRevealed = true
-
-    } else if(!this.state.currentRound.isFullyRevealed) {
-
+      this.state.currentRound.isQuestionRevealed = true;
+    } else if (!this.state.currentRound.isFullyRevealed) {
       // SHOW ALL ANSWERS
-      this.toggleRevealAllAnswers()
-
+      this.toggleRevealAllAnswers();
     } else {
-
-      if(this.state.roundIndex + 1 < this.state.rounds.length) {
-
+      if (this.state.roundIndex + 1 < this.state.rounds.length) {
         // SHOW NEXT ROUND
-        this.startRound(this.state.roundIndex + 1)
+        this.startRound(this.state.roundIndex + 1);
       } else {
-
         // SHOW END
-        this.state.screen = Screen.end
+        this.state.screen = Screen.end;
       }
     }
   }
 
   // ========= Answer ============
   toggleRevealAllAnswers() {
-    const unRevealedAnswers = this.state.currentRound.answers.filter( a => !a.isRevealed )
-    this.team1.strikes = 0
-    this.team2.strikes = 0
-    if(unRevealedAnswers.length == 0) {
-      this.state.currentRound.isFullyRevealed = false
-      this.state.currentRound.answers.forEach( a => a.isRevealed = false )
+    const unRevealedAnswers = this.state.currentRound.answers.filter(
+      (a) => !a.isRevealed
+    );
+    this.team1.strikes = 0;
+    this.team2.strikes = 0;
+    if (unRevealedAnswers.length == 0) {
+      this.state.currentRound.isFullyRevealed = false;
+      this.state.currentRound.answers.forEach((a) => (a.isRevealed = false));
     } else {
-      unRevealedAnswers.filter( a => !a.isRevealed ).forEach((answer, index) => {
-        setTimeout(() => {
-          answer.isRevealed = true
-          this.mediaState.playSound(Sound.ding)
-        }, index * 1000);
-      });
-      this.state.currentRound.isFullyRevealed = true
-    }      
+      unRevealedAnswers
+        .filter((a) => !a.isRevealed)
+        .forEach((answer, index) => {
+          setTimeout(() => {
+            answer.isRevealed = true;
+            this.mediaState.playSound(Sound.ding);
+          }, index * 1000);
+        });
+      this.state.currentRound.isFullyRevealed = true;
+    }
   }
 
   controlAnswer(num: number, show: Boolean) {
-    const answerIndex = num - 1
-    if(show) {
-      console.log(`Reveal Answer #${num}`)
-      this.revealAnswer(answerIndex)
+    const answerIndex = num - 1;
+    if (show) {
+      console.log(`Reveal Answer #${num}`);
+      this.revealAnswer(answerIndex);
     } else {
-      console.log(`Unreveal Answer #${num}`)
-      this.unrevealAnswer(answerIndex)
+      console.log(`Unreveal Answer #${num}`);
+      this.unrevealAnswer(answerIndex);
     }
   }
-  
 
   // ========= Team Actions ============
   toggleTeam(team: Team) {
-    if(this.selectedTeam == team) {
-      this.selectedTeam = null
+    if (this.selectedTeam == team) {
+      this.selectedTeam = null;
     } else {
-      this.selectedTeam = team
+      this.selectedTeam = team;
     }
   }
 
   hitBuzzer(team: Team | null = null) {
-    if(this.teamBuzzed) {
-      return
+    if (this.teamBuzzed) {
+      return;
     }
-    if(team) {
-      this.selectedTeam = team
+    if (team) {
+      this.selectedTeam = team;
     }
-    this.teamBuzzed = true
-    this.mediaState.playSound(Sound.buzzer)
+    this.teamBuzzed = true;
+    this.mediaState.playSound(Sound.buzzer);
   }
 
   strike(team: Team | null = null) {
-    if(this.selectedTeam != null) {
-      console.log('selected team' + this.selectedTeam)
-      
-      if(this.selectedTeam.strikes == 3) {
-        return
-      }else{
-      this.selectedTeam.strikes++
+    if (this.selectedTeam != null) {
+      console.log("selected team" + this.selectedTeam);
 
-      this.mediaState.playSound(Sound.wrong)
-  
-      this.xVisible = true
-      if(this.selectedTeam.strikes == 3){
-        console.log(this.selectedTeam.name + ' has 3 strikes')
-        this.teamhas3strikes = true
-        this.switchTeam(this.selectedTeam, this.selectedTeam == this.team1 ? this.team2 : this.team1)
-        this.lastQuestion(this.selectedTeam)
+      if (this.selectedTeam.strikes == 3) {
+        return;
+      } else {
+        this.selectedTeam.strikes++;
+
+        this.mediaState.playSound(Sound.wrong);
+
+        this.xVisible = true;
+        if (this.selectedTeam.strikes == 3) {
+          console.log(this.selectedTeam.name + " has 3 strikes");
+          this.teamhas3strikes = true;
+          this.switchTeam(
+            this.selectedTeam,
+            this.selectedTeam == this.team1 ? this.team2 : this.team1
+          );
+        }
+        //if one team has 3 strikes, the other team must answer correctly to get all points
       }
-      //if one team has 3 strikes, the other team must answer correctly to get all points
-    }
       setTimeout(() => {
-        this.xVisible = false
+        this.xVisible = false;
       }, 2000);
     }
   }
-  
-  lastQuestion(team: Team){
-    //if the next question is answered, then the team answering gets the points
 
-  }
   switchTeam(team1: Team, team2: Team) {
-    if(this.selectedTeam == team1) {
-      this.selectedTeam = team2
+    if (this.selectedTeam == team1) {
+      this.selectedTeam = team2;
     } else {
-      this.selectedTeam = team1
+      this.selectedTeam = team1;
     }
   }
 
   unstrike(team: Team | null = null) {
-    if(this.selectedTeam != null) {
-      this.selectedTeam.strikes = 0
+    if (this.selectedTeam != null) {
+      this.selectedTeam.strikes = 0;
     }
-    /*
-    if(this.team1.strikes == 3) {
-      this.threeStrikeEnd(this.state.tempScore, true, this.team1, this.team2)
-    }
-    if(this.team2.strikes == 3) {
-      this.threeStrikeEnd(this.state.tempScore, true, this.team2, this.team1)
-    }
-      */
   }
 
   revealAnswer(index: number) {
-    const answer = this.state.currentRound.answers[index]
+    const answer = this.state.currentRound.answers[index];
     if (answer.isRevealed) {
-      return
+      return;
     }
-    answer.isRevealed = true
-    this.mediaState.playSound(Sound.correct)
+    answer.isRevealed = true;
+    this.mediaState.playSound(Sound.correct);
 
-    this.state.tempScore += answer.amount
-    this.reevaluateIsFullyRevealed()
+    this.state.tempScore += answer.amount;
+    this.reevaluateIsFullyRevealed();
 
-    if(this.teamhas3strikes){
-      this.addScoreToTeam(this.state.tempScore)
-  }
-      
+    if (this.teamhas3strikes) {
+      //if one team has 3 strikes, the other team must answer correctly to get all points
+      this.addScoreToTeam(this.state.tempScore);
+    }
   }
 
   unrevealAnswer(index: number) {
-    const answer = this.state.currentRound.answers[index]
+    const answer = this.state.currentRound.answers[index];
     if (!answer.isRevealed) {
-      return
+      return;
     }
-    answer.isRevealed = false
-    this.mediaState.playSound(Sound.click)
+    answer.isRevealed = false;
+    this.mediaState.playSound(Sound.click);
 
-    this.state.tempScore -= answer.amount
-    this.reevaluateIsFullyRevealed()
+    this.state.tempScore -= answer.amount;
+    this.reevaluateIsFullyRevealed();
   }
 
   reevaluateIsFullyRevealed() {
-    const unRevealedAnswers = this.state.currentRound.answers.filter( a => !a.isRevealed )
-    this.state.currentRound.isFullyRevealed = unRevealedAnswers.length == 0
-    if(this.state.currentRound.isFullyRevealed) {
-      this.addScoreToTeam(this.state.tempScore)
-  }
-}
-  
-     
-
-  
-  addScoreToTeam(amount: number, playSound = true) {
-    if(this.selectedTeam != null) {
-      this.selectedTeam.score += amount
-
-      if(amount > 0 && playSound) {
-        this.mediaState.playSound(Sound.win)
-      }
+    const unRevealedAnswers = this.state.currentRound.answers.filter(
+      (a) => !a.isRevealed
+    );
+    this.state.currentRound.isFullyRevealed = unRevealedAnswers.length == 0;
+    if (this.state.currentRound.isFullyRevealed) {
+      this.addScoreToTeam(this.state.tempScore);
     }
   }
 
+  addScoreToTeam(amount: number, playSound = true) {
+    if (this.selectedTeam != null) {
+      this.selectedTeam.score += amount;
+
+      if (amount > 0 && playSound) {
+        this.mediaState.playSound(Sound.win);
+      }
+    }
+  }
 }
