@@ -10,7 +10,7 @@ export class StartViewComponent {
 
   @Input() file: RoundsFile
   @Output() fileChange = new EventEmitter<RoundsFile>()
-
+  // want v to open files, on file select the game should start immediately
   constructor() { }
 
   fileChanged(file: RoundsFile) {
