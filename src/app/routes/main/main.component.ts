@@ -5,10 +5,11 @@ import { Title } from '@angular/platform-browser';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+//import {InputFileComponent} from 'src/app/components/overlay/input-file/input-file.component';
 import { FileService } from 'src/app/services/file.service';
 import { InputFileComponent } from 'src/app/components/overlay/input-file/input-file.component';
 
-
+//working 9/30/2024
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
@@ -29,8 +30,7 @@ export class MainComponent {
   file: RoundsFile | null = null;
   fileName: string = "";
 
-  constructor(private title:Title, private http: HttpClient, private fileService: FileService, 
-    private InputFileComponent: InputFileComponent) {
+  constructor(private title:Title, private http: HttpClient, private fileService: FileService) {
     title.setTitle(environment.title)
   }
 
@@ -117,7 +117,16 @@ export class MainComponent {
       //console.log("got here")
       console.log("f pressed");
       //load data
-      //InputFileComponent.getFile("./assets/roundFiles/rounds_us.json");
+      // this.fileService.getFile('./assets/roundFiles/rounds_us.json')
+      // .then(file => {
+      //   this.file = file;
+      //   console.log('Loaded file:', this.file);
+      // })
+      // .catch(error => {
+      //   console.error('Error loading file:', error);
+      // });
+      //end of file loaded
+      
       console.log("completed loadJsonFile");
       this.advance();
     }

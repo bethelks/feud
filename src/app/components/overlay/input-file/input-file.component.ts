@@ -18,7 +18,7 @@ export class InputFileComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  public getFile(filePath: string) {
+  getFile(filePath: string) {
     console.log("51: " + filePath);
     fetch(filePath)
       .then(response => {
