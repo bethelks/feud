@@ -4,12 +4,10 @@ import { State, Screen, Round, Team, RoundsFile } from "../../model/model";
 import { Title } from '@angular/platform-browser';
 import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-//import {InputFileComponent} from 'src/app/components/overlay/input-file/input-file.component';
 import { FileService } from 'src/app/services/file.service';
 import { InputFileComponent } from 'src/app/components/overlay/input-file/input-file.component';
 
-//working 9/30/2024
+//working 9/30/2024 10:44am
 @Component({
   selector: 'app-main',
   templateUrl: './main.component.html',
@@ -17,6 +15,7 @@ import { InputFileComponent } from 'src/app/components/overlay/input-file/input-
 })
 export class MainComponent {
   data: any;
+  file: RoundsFile;
 
   state = new State()
   mediaState = new MediaState()
@@ -27,10 +26,11 @@ export class MainComponent {
   xVisible = false
   isMenuVisible = false
 
-  file: RoundsFile | null = null;
+  //file: RoundsFile | null = null;
   fileName: string = "";
 
-  constructor(private title:Title, private http: HttpClient, private fileService: FileService) {
+  constructor(private title:Title, private http: HttpClient, private FileServices: FileService,
+    /*private pizza: InputFileComponent*/) {
     title.setTitle(environment.title)
   }
 
@@ -117,17 +117,9 @@ export class MainComponent {
       //console.log("got here")
       console.log("f pressed");
       //load data
-      // this.fileService.getFile('./assets/roundFiles/rounds_us.json')
-      // .then(file => {
-      //   this.file = file;
-      //   console.log('Loaded file:', this.file);
-      // })
-      // .catch(error => {
-      //   console.error('Error loading file:', error);
-      // });
+      //this.loadFile("./assets/roundFiles/rounds_us.json");
       //end of file loaded
-      
-      console.log("completed loadJsonFile");
+      //console.log("completed loadJsonFile");
       this.advance();
     }
 
@@ -411,4 +403,16 @@ export class MainComponent {
       }
     }
   }
+
+  loadFile(filePath: string) {
+    this.FileServices.getFile(filePath)
+      .then(file => {
+        this.file = file;
+        console.log('File loaded:', this.file);
+      })
+      .catch(error => {
+        console.error('Error loading file:', error);
+      });
+  }
+
 }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, HostListener} from '@angular/core';
 import { RoundsFile } from 'src/app/model/model';
 import { FileService } from 'src/app/services/file.service';
 
@@ -18,8 +18,18 @@ export class InputFileComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  @HostListener('document:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    // Check if the pressed key is 'F' (you can use `event.key.toLowerCase()` to handle uppercase/lowercase cases)
+    if (event.key === 'F' || event.key === 'f') {
+      // Call the getFile function when 'F' is pressed
+      const filePath = './assets/roundFiles/rounds_us.json'; // Define your filePath or get it from input
+      this.getFile(filePath);
+    }
+  }
+
   getFile(filePath: string) {
-    console.log("51: " + filePath);
+    console.log("loaded getFile()");
     fetch(filePath)
       .then(response => {
         if (!response.ok) {
@@ -38,17 +48,5 @@ export class InputFileComponent implements OnInit {
         console.error('There was a problem with the fetch operation:', error);
       });
   }
-  
 
-  // loadFile(filePath: string) {
-  //   this.fileService.getFile(filePath)
-  //     .then(file => {
-  //       this.file = file;
-  //       this.fileChange.emit(this.file);
-  //     })
-  //     .catch(error => {
-  //       console.error('Error loading file:', error);
-  //     });
-  // }
-
-}
+} //working 9:30 10:46am
