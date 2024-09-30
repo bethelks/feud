@@ -26,6 +26,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { MainComponent } from './routes/main/main.component';
 import { SecondScreenComponent } from './routes/second-screen/second-screen.component';
 import { InputFileComponent } from './components/overlay/input-file/input-file.component';
+import { HttpClientModule } from '@angular/common/http';
+import { Component, HostListener } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
 
 const routes: Routes = [
   { path: 'main', component: MainComponent },
@@ -62,7 +67,8 @@ const routes: Routes = [
     FormsModule,
     BrowserModule,
     AppRoutingModule, 
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

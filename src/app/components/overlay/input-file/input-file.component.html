@@ -1,14 +1,22 @@
-<input id="file-upload" type="file" (change)="getFile($event)" #fileInput/>
+<!-- <input id="file-upload" type="file" (change)="getFile($event)" #fileInput/>
 <label for="file-upload" *ngIf="file == null; else fileTitle">Open File</label>
 <ng-template #fileTitle>
     <label for="file-upload">{{file.name}}</label>
-</ng-template>
+</ng-template> -->
+<div>
+    <button (click)="getFile('./assets/roundFiles/rounds_us.json')">Get File</button>
 
-<input type="file" (change)="onFileChange($event)" accept=".json" />
-
-<div #focusableElement (keyup)="onKeyUp($event)" tabindex="0">
-    Press 'F' or 'f' on your keyboard
+    <p>filler text</p>
 </div>
+
+<!-- <input type="file" (change)="onFileChange($event)" accept=".json" /> -->
+
+<!-- <input #focusableElement type="text" />
+<div>
+    <h1>Feud Game</h1>
+    <h2>Press "f" to load file</h2>
+    <pre>{{data | json}}</pre>
+</div> -->
 
 <!--
 if press button(

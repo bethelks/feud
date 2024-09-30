@@ -94,6 +94,7 @@ export class OverlayComponent implements OnInit {
   selectFile(file: RoundsFile) {
     this.state.file = file
     this.fileChange.emit(file)
+    console.log("selectFile called")
   }
 
   selectMusic(music: Music | null) {

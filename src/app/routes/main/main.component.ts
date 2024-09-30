@@ -3,6 +3,11 @@ import { MediaState, Music, Sound } from '../../model/media';
 import { State, Screen, Round, Team, RoundsFile } from "../../model/model";
 import { Title } from '@angular/platform-browser';
 import { environment } from 'src/environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { FileService } from 'src/app/services/file.service';
+import { InputFileComponent } from 'src/app/components/overlay/input-file/input-file.component';
+
 
 @Component({
   selector: 'app-main',
@@ -10,6 +15,7 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./main.component.css']
 })
 export class MainComponent {
+  data: any;
 
   state = new State()
   mediaState = new MediaState()
@@ -20,7 +26,11 @@ export class MainComponent {
   xVisible = false
   isMenuVisible = false
 
-  constructor(private title:Title) {
+  file: RoundsFile | null = null;
+  fileName: string = "";
+
+  constructor(private title:Title, private http: HttpClient, private fileService: FileService, 
+    private InputFileComponent: InputFileComponent) {
     title.setTitle(environment.title)
   }
 
@@ -102,6 +112,14 @@ export class MainComponent {
     // ======= Advance
     if(event.code == "Space") {
       this.advance()
+    }
+    else if(event.code == "KeyF"){
+      //console.log("got here")
+      console.log("f pressed");
+      //load data
+      //InputFileComponent.getFile("./assets/roundFiles/rounds_us.json");
+      console.log("completed loadJsonFile");
+      this.advance();
     }
 
     // ======= Reset
@@ -384,5 +402,4 @@ export class MainComponent {
       }
     }
   }
-
 }
