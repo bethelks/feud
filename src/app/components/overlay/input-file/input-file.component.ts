@@ -23,8 +23,23 @@ export class InputFileComponent implements OnInit {
     // Check if the pressed key is 'F' (you can use `event.key.toLowerCase()` to handle uppercase/lowercase cases)
     if (event.key === 'F' || event.key === 'f') {
       // Call the getFile function when 'F' is pressed
-      const filePath = './assets/roundFiles/rounds_us.json'; // Define your filePath or get it from input
+      const filePath = './assets/roundFiles/Round1.json'; // Define your filePath or get it from input
       this.getFile(filePath);
+    }
+    else if(event.key === 'G' || event.key === 'g'){
+      this.getFile('./assets/roundFiles/Round2.json');
+    }
+    else if(event.key === 'H' || event.key === 'h'){
+      this.getFile('./assets/roundFiles/Round3.json');
+    }
+    else if(event.key === 'j' || event.key === 'J'){
+      this.getFile('./assets/roundFiles/Round4.json');
+    }
+    else if(event.key === 'K' || event.key === 'k'){
+      this.getFile('./assets/roundFiles/Round5.json');
+    }
+    else if(event.key === 'L' || event.key === 'l'){
+      this.getFile('./assets/roundFiles/Round6.json');
     }
   }
 

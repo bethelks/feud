@@ -113,13 +113,8 @@ export class MainComponent {
     if(event.code == "Space") {
       this.advance()
     }
-    else if(event.code == "KeyF"){
-      //console.log("got here")
-      console.log("f pressed");
-      //load data
-      //this.loadFile("./assets/roundFiles/rounds_us.json");
-      //end of file loaded
-      //console.log("completed loadJsonFile");
+    else if(event.code == "KeyF" /**/|| event.code == "KeyG"  || event.code == "KeyH" 
+      || event.code == "KeyJ" || event.code == "KeyK" || event.code == "KeyL"/**/){
       this.advance();
     }
 
