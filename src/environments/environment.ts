@@ -7,7 +7,7 @@ import { Shorcut } from "src/app/components/view/shorcut/shorcut.component";
 export const environment = {
   production: true,
   title: "Developer Feud",
-  subtitle: "Bethel College - Software Development Program",
+  subtitle: "Bethel College",
   host: "Professor Hines",
 
   // Keys for the buzzers

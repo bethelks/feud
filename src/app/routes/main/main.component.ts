@@ -1,15 +1,22 @@
 import { Component, HostListener } from "@angular/core";
 import { MediaState, Music, Sound } from "../../model/media";
 import { State, Screen, Round, Team, RoundsFile } from "../../model/model";
-import { Title } from "@angular/platform-browser";
-import { environment } from "src/environments/environment";
 
+import { Title } from '@angular/platform-browser';
+import { environment } from 'src/environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { FileService } from 'src/app/services/file.service';
+import { InputFileComponent } from 'src/app/components/overlay/input-file/input-file.component';
+
+
+//working 9/30/2024 10:44am
 @Component({
   selector: "app-main",
   templateUrl: "./main.component.html",
   styleUrls: ["./main.component.css"],
 })
 export class MainComponent {
+
   state = new State();
   mediaState = new MediaState();
   team1 = this.state.team1; //mm
@@ -24,6 +31,7 @@ export class MainComponent {
 
   constructor(private title: Title) {
     title.setTitle(environment.title);
+
   }
 
   ngOnInit() {}
@@ -103,6 +111,10 @@ export class MainComponent {
     if (event.code == "Space") {
       this.advance();
     }
+    else if(event.code == "KeyF" /**/|| event.code == "KeyG"  || event.code == "KeyH" 
+      || event.code == "KeyJ" || event.code == "KeyK" || event.code == "KeyL"/**/){
+      this.advance();
+    }
 
     // ======= Reset
     if (event.code == "KeyR") {
@@ -179,10 +191,12 @@ export class MainComponent {
         this.state.screen = Screen.instructions;
         break;
       }
-      case Screen.instructions: {
-        if (this.state.instructionStep >= 3) {
-          console.log("ADVANCE -> Rounds");
-          this.startRound(0);
+
+      case Screen.instructions: {         
+        if(this.state.instructionStep >= 3) {
+          console.log("ADVANCE -> Rounds")
+          this.startRound(0)
+
         } else {
           this.state.instructionStep++;
           console.log("ADVANCE -> Instructions " + this.state.instructionStep);
@@ -422,4 +436,6 @@ export class MainComponent {
       }
     }
   }
+
 }
+
