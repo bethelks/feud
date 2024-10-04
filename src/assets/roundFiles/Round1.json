@@ -1,0 +1,29 @@
+{
+	"rounds": [
+		{
+			"name": "Name the 5 rules of the Big O Notation",
+			"answers": [
+				{
+					"text": "O(1): Constant time complexity",
+					"amount": 2
+				},
+				{
+					"text": "O(log n): Logarithmic time complexity",
+					"amount": 2
+				},
+				{
+					"text": "O(n): Linear time complexity",
+					"amount": 2
+				},
+				{
+					"text": "O(n log n): Linearithmic time complexity",
+					"amount": 2
+				},
+				{
+					"text": "O(n^2): Quadratic time complexity",
+					"amount": 2
+				}
+			]
+		}
+	]
+}
