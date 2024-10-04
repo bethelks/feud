@@ -1,23 +1,23 @@
 <h1 class="bold">Instructions</h1>
 
-<ul [ngClass]="{'visible': state.instructionStep > 0}">
+<!-- <ul [ngClass]="{'visible': state.instructionStep > 0}">
     <h1 class="bold">1. Questions</h1>
     <li [ngClass]="{'visible': state.instructionStep > 0}">What is the possible smallest number that its square is between the values of 15 and 30?</li>
     <li [ngClass]="{'visible': state.instructionStep > 0}">-5</li>
+</ul> -->
+
+<ul [ngClass]="{'visible': state.instructionStep > 0}">
+    <h1 class="bold">1. Start Round</h1>
+    <li [ngClass]="{'visible': state.instructionStep > 0}">One player from each team to the podium</li>
+    <li [ngClass]="{'visible': state.instructionStep > 0}">Answer is read - Hit buzzer to give an answer</li>
+    <li [ngClass]="{'visible': state.instructionStep > 0}">Then contestant gets to answer</li>
+    <li [ngClass]="{'visible': state.instructionStep > 0}">Whoever gets more points can choose to play round with the team</li>
 </ul>
 
 <ul [ngClass]="{'visible': state.instructionStep > 1}">
-    <h1 class="bold">2. Start Round</h1>
-    <li [ngClass]="{'visible': state.instructionStep > 1}">One player from each team to the podium</li>
-    <li [ngClass]="{'visible': state.instructionStep > 1}">Answer is read - Hit buzzer to give an answer</li>
-    <li [ngClass]="{'visible': state.instructionStep > 1}">Then contestant gets to answer</li>
-    <li [ngClass]="{'visible': state.instructionStep > 1}">Whoever gets more points can choose to play round with the team</li>
-</ul>
-
-<ul [ngClass]="{'visible': state.instructionStep > 2}">
-    <h1 class="bold">3. Play Round</h1>
-    <li [ngClass]="{'visible': state.instructionStep > 2}">Team members get two answer in turns</li>
-    <li [ngClass]="{'visible': state.instructionStep > 2}">Strike when answer not on the board</li> 
-    <li [ngClass]="{'visible': state.instructionStep > 2}">If three strikes other team can steal</li>
-    <li [ngClass]="{'visible': state.instructionStep > 2}">If other team gets one answer on the board they get all the points</li>
+    <h1 class="bold">2. Play Round</h1>
+    <li [ngClass]="{'visible': state.instructionStep > 1}">Team members get two answer in turns</li>
+    <li [ngClass]="{'visible': state.instructionStep > 1}">Strike when answer not on the board</li> 
+    <li [ngClass]="{'visible': state.instructionStep > 1}">If three strikes other team can steal</li>
+    <li [ngClass]="{'visible': state.instructionStep > 1}">If other team gets one answer on the board they get all the points</li>
 </ul>

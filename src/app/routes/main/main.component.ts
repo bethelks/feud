@@ -191,7 +191,7 @@ export class MainComponent {
         break
       }
       case Screen.instructions: {         
-        if(this.state.instructionStep >= 3) {
+        if(this.state.instructionStep >= 2) {
           console.log("ADVANCE -> Rounds")
           this.startRound(0)
         } else {
