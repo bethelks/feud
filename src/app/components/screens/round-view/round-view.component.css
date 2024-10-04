@@ -78,3 +78,7 @@
 
     flex-grow: 1;
 }
+.timercount{
+    font-size: 30px;
+    color: white;
+}
