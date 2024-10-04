@@ -388,6 +388,9 @@ export class MainComponent {
     if (this.teamhas3strikes) {
       //if one team has 3 strikes, the other team must answer correctly to get all points
       this.addScoreToTeam(this.state.tempScore);
+      setTimeout(() =>{
+        this.advance();
+      }, 2000)
     }
   }
 
