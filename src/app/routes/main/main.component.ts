@@ -336,9 +336,7 @@ export class MainComponent {
     if (this.selectedTeam != null) {
       console.log("selected team" + this.selectedTeam);
 
-      if (this.selectedTeam.strikes == 3) {
-        return;
-      } else {
+      
         this.selectedTeam.strikes++;
 
         this.mediaState.playSound(Sound.wrong);
@@ -351,7 +349,7 @@ export class MainComponent {
             this.selectedTeam,
             this.selectedTeam == this.team1 ? this.team2 : this.team1 //if selected team is team 1 swap to team2, else swap to team1
           );
-        }
+        
         //if one team has 3 strikes, the other team must answer correctly to get all points
       }
       setTimeout(() => {
