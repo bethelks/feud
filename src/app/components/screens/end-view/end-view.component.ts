@@ -29,6 +29,8 @@ export class EndViewComponent implements OnInit {
   get winningTeam(): Team | null{
     const t1 = this.state.team1
     const t2 = this.state.team2
+    console.log(t1.score)
+    console.log(t2.score)
     if(t1.score == t2.score) {
       return null
     } else if (t1.score > t2.score) {

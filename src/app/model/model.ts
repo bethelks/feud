@@ -34,7 +34,7 @@ export enum Screen {
     intro = 1,
     instructions = 2,
     round = 3,
-    end = 4
+    end = 4,
   }
 
 export class Team {
@@ -107,4 +107,45 @@ export class Answer {
     }
 }
 
+export class Timer{
+    public isRunning = false;
+    public time = 0;
+    private intervalId: any;
+
+    start(){
+        if(!this.isRunning){
+            this.isRunning = true;
+            this.intervalId = setInterval(()=>{
+                this.update();
+                if(this.time >= 1799){
+                    this.stop();
+                }
+            }, 1000)
+        }
+    
+    }
+    update(): void{
+        this.time++;
+    }
+
+    stop(): void{
+        if(this.isRunning){
+        this.isRunning = false;
+        clearInterval(this.intervalId);
+        }
+        
+    }
+    getTime(){
+        //convert time to minutes
+        const minutes = Math.floor(this.time / 60);
+        return [(29 - minutes), (60 - this.time % 60)];
+    }
+    reset(){
+        this.time = 0;
+        if(this.isRunning){
+            this.stop();
+            this.start();
+    }
+}
+}
 export const allRounds = []
