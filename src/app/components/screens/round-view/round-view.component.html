@@ -1,3 +1,6 @@
+<div class="timer">
+    <p class="timercount">Time: {{getTime()}}</p>
+</div>
 <div class="round">
     <app-title *ngIf="!isSecondScreen"></app-title>
     <app-score *ngIf="!isSecondScreen" [score]="score"></app-score>

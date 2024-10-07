@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Round } from 'src/app/model/model';
+import { Round, Screen, Timer } from 'src/app/model/model';
 
 @Component({
   selector: 'app-round-view',
@@ -15,9 +15,25 @@ export class RoundViewComponent implements OnInit {
   @Input() numAnswers = 0
   numbers = new Array(8)
   selectedAnswerIndex: number | null = null;
-  constructor() { }
+  timerInstance: Timer;
+
+  constructor() { 
+  this.timerInstance = new Timer();
+  }
 
   ngOnInit(): void {
+    this.timerInstance.start();
+    console.log(this.timerInstance.getTime())
+  }
+  getTime(): string {
+      const [minutes, seconds] = this.timerInstance.getTime();
+      console.log(minutes, seconds)
+      if(seconds == 1 && minutes == 0){
+        this.timerInstance.stop();
+        return "Times up!"
+        
+      }
+      return `${minutes}:${seconds}`
   }
   selectAnswer(index: number): void {
     this.selectedAnswerIndex = index;
